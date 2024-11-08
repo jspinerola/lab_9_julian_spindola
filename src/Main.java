@@ -12,7 +12,7 @@ public class Main {
         table.put(new Node(19, "brown"));
 
         // Remove a value to ensure proceeding accesses still work
-//        table.remove(0);
+        table.remove(0);
 
         System.out.println(table);
         System.out.println(table.get(9));

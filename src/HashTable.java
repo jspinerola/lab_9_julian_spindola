@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class HashTable {
     private Node[] table;
     private int capacity;
@@ -39,14 +41,48 @@ public class HashTable {
         int collisionCount = 0;
         int hash = hashCode(node.getKey());
 
+        if(occupants >= (capacity * (.8))){
+            rehash();
+        }
+
+
         while (table[hash] != null){
+            if(table[hash].key == -1){
+                table[hash] = node;
+                occupants++;
+                return;
+            }
             collisionCount++;
             hash = doubleHash(node.getKey(), collisionCount);
         }
+
         table[hash] = node;
+        occupants++;
     }
 
     // Implement remove and rehash methods for lab assignment
+    public void remove(Integer key){
+        int hash = hashCode(key);
+        if (table[hash] != null) {
+            table[hash] = VACANT;
+            occupants--;
+        }
+    }
+
+    private void rehash(){
+        HashTable newTable = new HashTable(this.capacity * 2);
+        for (Node node:
+             table) {
+            if (node != null){
+                newTable.put(node);
+            }
+        }
+        this.table = newTable.table;
+        this.capacity = newTable.capacity;
+        this.occupants = newTable.occupants;
+//        System.out.println(Arrays.toString(newTable.table));
+        this.table = Arrays.copyOf(newTable.table, this.capacity * 2);
+    }
 
     public String toString() {
         String s = "[";
